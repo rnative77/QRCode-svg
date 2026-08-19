@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState} from 'react';
 
 import {
   Text,
@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Share,
 } from 'react-native';
 
 import QRCode from 'react-native-qrcode-svg';
@@ -14,19 +13,6 @@ import QRCode from 'react-native-qrcode-svg';
 const App = () => {
   const [inputText, setInputText] = useState('');
   const [qrvalue, setQrvalue] = useState('');
-  let myQRCode = useRef();
-
-  const shareQRCode = () => {
-    myQRCode.toDataURL((dataURL) => {
-      console.log(dataURL);
-      let shareImageBase64 = {
-        title: 'React Native',
-        url: `data:image/png;base64,${dataURL}`,
-        subject: 'Share Link', //  for email
-      };
-      Share.share(shareImageBase64).catch((error) => console.log(error));
-    });
-  };
 
   return (
     <View style={{flex: 1}}>
@@ -35,8 +21,6 @@ const App = () => {
           Generation of QR Code in React Native
         </Text>
         <QRCode
-          getRef={(ref) => (myQRCode = ref)}
-          // ref={myQRCode}
           //QR code value
           value={qrvalue ? qrvalue : 'NA'}
           //size of QR Code
@@ -45,6 +29,11 @@ const App = () => {
           color="black"
           //Background Color of the QR Code (Optional)
           backgroundColor="white"
+          //Logo of in the center of QR Code (Optional)
+          logo={{
+            url:
+              'https://raw.githubusercontent.com/AboutReact/sampleresource/master/logosmalltransparen.png',
+          }}
           //Center Logo size  (Optional)
           logoSize={30}
           //Center Logo margin (Optional)
@@ -59,7 +48,9 @@ const App = () => {
         </Text>
         <TextInput
           style={styles.textInputStyle}
-          onChangeText={(inputText) => setInputText(inputText)}
+          onChangeText={
+            (inputText) => setInputText(inputText)
+          }
           placeholder="Enter Any Value"
           value={inputText}
         />
@@ -68,14 +59,6 @@ const App = () => {
           onPress={() => setQrvalue(inputText)}>
           <Text style={styles.buttonTextStyle}>
             Generate QR Code
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={shareQRCode}>
-          <Text style={styles.buttonTextStyle}>
-            Share QR Code
           </Text>
         </TouchableOpacity>
       </View>
